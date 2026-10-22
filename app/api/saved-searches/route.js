@@ -24,7 +24,7 @@ export async function POST(request) {
     const now = new Date();
     const criteria = { email, city, type, maxPriceLakh, keyword, minBeds, minArea, maxArea };
     const existing = await db.collection("savedSearches").findOne(criteria);
-    const unsubscribeToken = existing?.unsubscribeToken || crypto.randomBytes(24).toString("hex");
+    const unsubscribeToken = existing?.active ? existing.unsubscribeToken : crypto.randomBytes(24).toString("hex");
     await db.collection("savedSearches").updateOne(criteria, {
       $set: { ...criteria, active: true, consentAt: existing?.consentAt || now, updatedAt: now, unsubscribeToken },
       $setOnInsert: { createdAt: now }
