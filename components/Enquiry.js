@@ -15,7 +15,7 @@ export default function Enquiry({ subject }) {
     window.open(waUrl, "_blank", "noopener,noreferrer");
     try { await fetch("/api/enquiries", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, phone, note, subject }) }); } catch { /* WhatsApp enquiry remains available if storage is offline. */ }
   }
-  return <aside className="enquiry">
+  return <aside className="enquiry" id="enquiry">
     <p className="eyebrow">LET’S TALK PROPERTY</p><h2>Make an enquiry.</h2>
     <p className="muted">Share your details and continue securely in WhatsApp.</p>
     <label>Your name<input value={name} onChange={e => setName(e.target.value)} autoComplete="name" placeholder="Full name" /></label>
