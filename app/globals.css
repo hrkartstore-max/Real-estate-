@@ -121,3 +121,30 @@ input:focus,select:focus,textarea:focus{border-color:#a58a57!important;box-shado
 @keyframes heroDrift{from{transform:scale(1.025) translate3d(0,0,0)}to{transform:scale(1.09) translate3d(-.6%,.5%,0)}}
 @media(max-width:680px){.hero-photo{animation:none;transform:none}.hero-content>*{animation-duration:.5s}.property-grid .property-card:nth-child(n){animation-delay:0s}}
 @media(prefers-reduced-motion:reduce){.hero-photo{animation:none;transform:none}}
+
+
+/* Interactive home-loan EMI estimator */
+.mortgage-calculator{margin:34px 0 28px;padding:clamp(20px,3vw,30px);background:#eeefe8;border:1px solid var(--line)}
+.mortgage-heading{max-width:580px;margin-bottom:24px}
+.mortgage-heading .eyebrow{margin-bottom:8px}
+.mortgage-heading h2{font-size:clamp(27px,3vw,36px);margin:0 0 10px}
+.mortgage-heading h2 em{color:var(--gold)}
+.mortgage-heading>p:last-child{font-size:11px;line-height:1.8;color:var(--muted);margin:0}
+.mortgage-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,.9fr);gap:24px;align-items:stretch}
+.mortgage-controls{display:flex;flex-direction:column;gap:20px;padding:4px 0}
+.mortgage-control{display:flex;flex-direction:column;gap:10px}
+.mortgage-control>span{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:11px;color:#5b665d}
+.mortgage-control>span strong{color:var(--forest);font-size:12px}
+.mortgage-control input[type=range]{width:100%;accent-color:var(--forest);cursor:pointer}
+.mortgage-control small{font-size:9px;color:var(--muted)}
+.mortgage-result{padding:22px;background:var(--deep);color:white;display:flex;flex-direction:column;gap:13px}
+.mortgage-result>small{font-size:9px;letter-spacing:.13em;color:#c9d1c8}
+.mortgage-emi{font-size:clamp(27px,3vw,37px);letter-spacing:-.04em;line-height:1.2;color:#e1c99d;overflow-wrap:anywhere}
+.mortgage-result-row{display:flex;justify-content:space-between;gap:12px;padding-top:11px;border-top:1px solid #ffffff20;font-size:10px}
+.mortgage-result-row span{color:#c6d0c8}
+.mortgage-result-row b{text-align:right;font-weight:600;overflow-wrap:anywhere}
+.mortgage-result-row.mortgage-total{font-size:11px}
+.mortgage-cta{margin-top:5px;background:#f4f0e5;border-color:#f4f0e5;color:var(--deep);width:100%;font-size:10px}
+.mortgage-cta:hover:not(:disabled){background:#e6d7b9;color:var(--deep)}
+.mortgage-disclaimer{font-size:9px;line-height:1.7;color:var(--muted);margin:15px 0 0}
+@media(max-width:680px){.mortgage-calculator{margin:26px 0;padding:18px}.mortgage-layout{grid-template-columns:1fr;gap:20px}.mortgage-result{padding:19px}.mortgage-emi{font-size:31px}}
