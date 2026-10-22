@@ -11,14 +11,18 @@ export async function POST(request) {
   const city = String(body?.city || "All").trim().slice(0, 100);
   const type = String(body?.type || "All").trim();
   const maxPriceLakh = Number(body?.maxPriceLakh || 0);
+  const keyword = String(body?.keyword || "").trim().slice(0, 120);
+  const minBeds = Number(body?.minBeds || 0);
+  const minArea = Number(body?.minArea || 0);
+  const maxArea = Number(body?.maxArea || 0);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
-  if (!city || !allowedTypes.includes(type) || !Number.isFinite(maxPriceLakh) || maxPriceLakh < 0 || maxPriceLakh > 1000000) return NextResponse.json({ error: "Choose a valid city, property type and maximum budget." }, { status: 400 });
+  if (!city || !allowedTypes.includes(type) || !Number.isFinite(maxPriceLakh) || maxPriceLakh < 0 || maxPriceLakh > 1000000 || !Number.isInteger(minBeds) || minBeds < 0 || minBeds > 20 || !Number.isFinite(minArea) || minArea < 0 || minArea > 1000000 || !Number.isFinite(maxArea) || maxArea < 0 || maxArea > 1000000 || (maxArea > 0 && minArea > maxArea)) return NextResponse.json({ error: "Choose valid city, type, budget and size filters." }, { status: 400 });
   if (body?.consent !== true) return NextResponse.json({ error: "Please consent to receive listing alerts by email." }, { status: 400 });
   try {
     const db = await getDb();
     if (!db) return NextResponse.json({ error: "Email alerts are not available until the database is configured." }, { status: 503 });
     const now = new Date();
-    const criteria = { email, city, type, maxPriceLakh };
+    const criteria = { email, city, type, maxPriceLakh, keyword, minBeds, minArea, maxArea };
     const existing = await db.collection("savedSearches").findOne(criteria);
     const unsubscribeToken = existing?.unsubscribeToken || crypto.randomBytes(24).toString("hex");
     await db.collection("savedSearches").updateOne(criteria, {
