@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getDb } from "../../../lib/mongodb";
 import { isAdminRequest } from "../../../lib/auth";
+import { checkRateLimit } from "../../../lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 export async function GET(request) {
@@ -16,6 +17,13 @@ export async function GET(request) {
   }
 }
 export async function POST(request) {
+  const rate = await checkRateLimit(request, "public-enquiry", 5);
+  if (rate.limited) {
+    return NextResponse.json(
+      { error: "Too many enquiries from this connection. Please try again later or contact us through WhatsApp." },
+      { status: 429, headers: { "Retry-After": String(rate.retryAfterSeconds) } }
+    );
+  }
   const body = await request.json().catch(() => null);
   const name = String(body?.name || "").trim().slice(0, 100);
   const phone = String(body?.phone || "").replace(/\D/g, "").slice(0, 10);
