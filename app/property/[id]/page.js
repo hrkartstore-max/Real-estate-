@@ -29,8 +29,8 @@ export async function generateMetadata({ params }) {
     title, description,
     alternates: { canonical: url },
     keywords: [p.title, p.city, p.type, "property in Tamil Nadu", "HEPRA Realty"],
-    openGraph: { type: "website", title, description, url, siteName: "Hepra Realty", locale: "en_IN", images: [{ url: `/api/og?title=${encodeURIComponent(p.title)}&city=${encodeURIComponent(p.city)}&type=${encodeURIComponent(p.type)}&price=${encodeURIComponent(fmt(p.price))}&area=${encodeURIComponent(String(p.area))}` }] },
-    twitter: { card: "summary_large_image", title, description, images: [`/api/og?title=${encodeURIComponent(p.title)}&city=${encodeURIComponent(p.city)}&type=${encodeURIComponent(p.type)}&price=${encodeURIComponent(fmt(p.price))}&area=${encodeURIComponent(String(p.area))}`] },
+    openGraph: { type: "website", title, description, url, siteName: "Hepra Realty", locale: "en_IN", images: [{ url: `/og/property?title=${encodeURIComponent(p.title)}&city=${encodeURIComponent(p.city)}&type=${encodeURIComponent(p.type)}&price=${encodeURIComponent(fmt(p.price))}&area=${encodeURIComponent(String(p.area))}` }] },
+    twitter: { card: "summary_large_image", title, description, images: [`/og/property?title=${encodeURIComponent(p.title)}&city=${encodeURIComponent(p.city)}&type=${encodeURIComponent(p.type)}&price=${encodeURIComponent(fmt(p.price))}&area=${encodeURIComponent(String(p.area))}`] },
     robots: { index: verified, follow: true }
   };
 }
