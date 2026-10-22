@@ -37,3 +37,5 @@ body{font-family:var(--sans);letter-spacing:-.01em}
 @media(max-width:760px){.admin-wrap{width:calc(100% - 32px);padding:35px 0 60px}.admin-top{align-items:flex-start}.admin-top h1{font-size:39px}.admin-layout{grid-template-columns:1fr}.admin-form,.admin-list{padding:18px}.admin-item{align-items:flex-start}.admin-item-actions{gap:6px}.admin-item-actions button{padding:3px}.admin-form-row{gap:8px}}
 
 .admin-leads{grid-column:1/-1}.admin-leads .admin-item select{border:1px solid var(--line);padding:8px;background:var(--white);font-size:10px;color:var(--ink);max-width:130px}
+
+.account-card .account-saved{padding:18px;border:1px solid var(--line);background:#f5f4ed;display:flex;flex-direction:column;align-items:flex-start;gap:10px}.account-saved strong{font:22px var(--serif);color:var(--forest)}.account-saved p{font-size:11px;line-height:1.7;color:var(--muted);margin:0}.account-saved .button{margin-top:3px}
