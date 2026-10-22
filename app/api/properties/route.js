@@ -15,7 +15,7 @@ function validProperty(p) {
   return p && typeof p.title === "string" && p.title.trim() && typeof p.city === "string" && p.city.trim() &&
     ["Apartment", "Villa", "House", "Plot"].includes(p.type) && Number.isFinite(Number(p.price)) && Number(p.price) > 0 &&
     Number.isFinite(Number(p.area)) && Number(p.area) > 0 &&
-    (p.latitude == null || p.latitude === "" || (Number.isFinite(Number(p.latitude)) && Number(p.latitude >= -90) && Number(p.latitude) <= 90)) &&
+    (p.latitude == null || p.latitude === "" || (Number.isFinite(Number(p.latitude)) && Number(p.latitude) >= -90 && Number(p.latitude) <= 90)) &&
     (p.longitude == null || p.longitude === "" || (Number.isFinite(Number(p.longitude)) && Number(p.longitude) >= -180 && Number(p.longitude) <= 180));
 }
 export async function GET() {
