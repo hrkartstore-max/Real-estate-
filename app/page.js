@@ -1,0 +1,70 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import Link from "next/link";
+import { properties, cities, types } from "../lib/properties";
+import { fmt } from "../lib/site";
+import Art from "../components/Art";
+
+const categories = [
+  { type: "Apartment", title: "City apartments", desc: "Thoughtfully located homes for everyday living.", icon: "⌂" },
+  { type: "Villa", title: "Private villas", desc: "More space, privacy and room to grow.", icon: "◇" },
+  { type: "House", title: "Independent homes", desc: "A place that feels completely your own.", icon: "⌂" },
+  { type: "Plot", title: "Residential plots", desc: "Find the right ground for your next chapter.", icon: "▧" }
+];
+
+export default function Home() {
+  const [city, setCity] = useState("All");
+  const [type, setType] = useState("All");
+  const [budget, setBudget] = useState(0);
+  const [query, setQuery] = useState("");
+  const [sort, setSort] = useState("featured");
+  const listings = useMemo(() => {
+    const found = properties.filter(p =>
+      (city === "All" || p.city === city) &&
+      (type === "All" || p.type === type) &&
+      (!budget || p.price <= budget) &&
+      `${p.title} ${p.city} ${p.type} ${p.area}`.toLowerCase().includes(query.toLowerCase().trim())
+    );
+    if (sort === "low") found.sort((a,b) => a.price-b.price);
+    if (sort === "high") found.sort((a,b) => b.price-a.price);
+    if (sort === "area") found.sort((a,b) => b.area-a.area);
+    return found;
+  }, [city,type,budget,query,sort]);
+  const reset = () => { setCity("All"); setType("All"); setBudget(0); setQuery(""); setSort("featured"); };
+
+  return <main>
+    <section className="hero"><div className="hero-photo" /><div className="hero-overlay" /><div className="hero-content">
+      <p className="eyebrow"><span /> A MORE CONSIDERED WAY TO FIND HOME</p>
+      <h1>Find a place<br/><em>to belong.</em></h1>
+      <p className="hero-copy">Exceptional homes, private villas and promising plots across Tamil Nadu. Start with what matters to you.</p>
+      <a className="underlink" href="#properties">Explore the collection <span>↘</span></a>
+      <div className="hero-sign"><span>H</span><div><b>HEPRA REALTY</b><small>Property, with perspective.</small></div></div>
+    </div><div className="hero-caption">01 <i/> TAMIL NADU PROPERTY COLLECTION</div></section>
+
+    <section className="search-section"><div className="search-heading"><p className="eyebrow dark">THE SEARCH STARTS HERE</p><h2>What are you looking for?</h2></div>
+      <div className="search-panel">
+        <label className="keyword"><span>LOCATION OR KEYWORD</span><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Try Chennai, villa, 3 BHK…" /></label>
+        <label><span>CITY</span><select value={city} onChange={e=>setCity(e.target.value)}>{cities.map(c=><option key={c}>{c}</option>)}</select></label>
+        <label><span>PROPERTY TYPE</span><select value={type} onChange={e=>setType(e.target.value)}>{types.map(t=><option key={t}>{t}</option>)}</select></label>
+        <label><span>MAXIMUM BUDGET</span><select value={budget} onChange={e=>setBudget(+e.target.value)}><option value="0">Any budget</option><option value="30">Up to ₹30 L</option><option value="50">Up to ₹50 L</option><option value="100">Up to ₹1 Cr</option><option value="250">Up to ₹2.5 Cr</option><option value="500">Up to ₹5 Cr</option></select></label>
+        <a className="button search-button" href="#properties">Find properties ↗</a>
+      </div>
+    </section>
+
+    <section className="intro wrap"><div><p className="eyebrow dark">A BETTER WAY TO MOVE FORWARD</p><h2>Space for your<br/><em>next chapter.</em></h2></div><p>From your first apartment to land you can build on, discover a considered collection of properties selected to help you take your next step with clarity.</p></section>
+
+    <section className="categories wrap">{categories.map(c=><button key={c.type} className={`category ${type===c.type?"active":""}`} onClick={()=>{setType(type===c.type?"All":c.type);document.getElementById("properties")?.scrollIntoView({behavior:"smooth"});}}><span className="category-icon">{c.icon}</span><strong>{c.title}</strong><small>{c.desc}</small><i>↗</i></button>)}</section>
+
+    <section className="collection" id="properties"><div className="wrap"><div className="section-head"><div><p className="eyebrow dark">THE HEPRA COLLECTION</p><h2>Properties with <em>possibility.</em></h2><p className="muted">Explore homes and land across Tamil Nadu.</p></div><label className="sort"><span>SORT BY</span><select value={sort} onChange={e=>setSort(e.target.value)}><option value="featured">Curated order</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="area">Largest area</option></select></label></div>
+      <div className="result-line"><span><b>{String(listings.length).padStart(2,"0")}</b> properties to explore</span><button onClick={reset}>Reset filters ↺</button></div>
+      {listings.length===0&&<div className="empty"><h3>No properties found</h3><p>Try a different location, type or budget.</p><button className="button" onClick={reset}>Clear all filters</button></div>}
+      <div className="property-grid">{listings.map((p,i)=><Link className="property-card" href={`/property/${p.id}`} key={p.id}><div className="property-image"><Art type={p.type}/><span className="number">0{i+1}</span><span className="type-pill">{p.type}</span><span className="open-arrow">↗</span></div><div className="property-info"><p className="location">⌖ {p.city} <span>/</span> {p.area.toLocaleString("en-IN")} sq ft</p><h3>{p.title}</h3><div className="price-row"><strong>{fmt(p.price)}</strong><small>{p.beds ? `${p.beds} bed · ${p.baths} bath` : "Residential land"}</small></div></div></Link>)}</div>
+      <p className="sample-note">Illustrative sample listings only. Verify availability, price, title and approvals independently before making a decision.</p>
+    </div></section>
+
+    <section className="approach" id="approach"><div className="approach-image"><div className="monogram"><span>H</span><small>HEPRA REALTY</small></div></div><div className="approach-copy"><p className="eyebrow">THE HEPRA APPROACH</p><h2>Good decisions<br/>start with <em>clarity.</em></h2><p>Property is personal. We believe the process should feel considered, transparent and centred around what you need next.</p><div className="steps"><div><b>01</b><span><strong>Start with your priorities</strong><small>Location, lifestyle and budget come first.</small></span></div><div><b>02</b><span><strong>Ask the right questions</strong><small>Request documentation and verify every detail.</small></span></div><div><b>03</b><span><strong>Move at your own pace</strong><small>Make an informed choice, without the rush.</small></span></div></div><a className="underlink" href={`https://wa.me/918124262289`} target="_blank" rel="noreferrer">Talk to our team <span>↗</span></a></div></section>
+
+    <section className="closing"><p className="eyebrow dark">YOUR NEXT CHAPTER BEGINS HERE</p><h2>Let’s find the <em>right place.</em></h2><p>Tell us what you have in mind. We’ll help you take the next step.</p><a className="button" href="https://wa.me/918124262289" target="_blank" rel="noreferrer">Start a conversation ↗</a></section>
+  </main>;
+}
