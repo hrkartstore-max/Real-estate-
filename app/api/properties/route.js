@@ -4,13 +4,13 @@ import { properties as sampleProperties } from "../../../lib/properties";
 import { getDb } from "../../../lib/mongodb";
 import { isAdminRequest } from "../../../lib/auth";
 import { notifySavedSearchSubscribers } from "../../../lib/listing-alerts";
+import { REQUIRED_VERIFICATION_DOCS } from "../../../lib/verification";
 
 export const dynamic = "force-dynamic";
 const collection = async () => {
   const db = await getDb();
   return db ? db.collection("properties") : null;
 };
-const REQUIRED_VERIFICATION_DOCS = ["ownershipProof", "approvalDocuments", "encumbranceCertificate", "propertyTaxReceipt"];
 function validProperty(p) {
   return p && typeof p.title === "string" && p.title.trim() && typeof p.city === "string" && p.city.trim() &&
     ["Apartment", "Villa", "House", "Plot"].includes(p.type) && Number.isFinite(Number(p.price)) && Number(p.price) > 0 &&
