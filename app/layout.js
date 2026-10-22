@@ -3,9 +3,12 @@ import Link from "next/link";
 import { SITE } from "../lib/site";
 
 export const metadata = {
-  title: "Hepra Realty | Considered homes across Tamil Nadu",
-  description: "Explore homes, villas, apartments and residential land with Hepra Realty.",
-  metadataBase: new URL("https://hepra.in")
+  title: { default: "Hepra Realty | Considered homes across Tamil Nadu", template: "%s | Hepra Realty" },
+  description: "Explore homes, villas, apartments and residential land with Hepra Realty. Compare properties and enquire directly.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://hepra.in"),
+  openGraph: { title: "Hepra Realty", description: "A considered way to explore property across Tamil Nadu.", type: "website", locale: "en_IN", siteName: "Hepra Realty" },
+  twitter: { card: "summary_large_image", title: "Hepra Realty", description: "Explore homes and land across Tamil Nadu." },
+  robots: { index: true, follow: true }
 };
 
 export default function RootLayout({ children }) {
