@@ -26,7 +26,7 @@ export default function Home() {
       const saved = window.localStorage.getItem("hepra-realty-saved-homes");
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) setFavorites(parsed.filter(id => properties.some(p => p.id === id)));
+        if (Array.isArray(parsed)) setFavorites(parsed.filter(id => typeof id === "string"));
       }
     } catch (error) {
       // Keep saved homes usable if browser storage is unavailable.
@@ -82,8 +82,8 @@ export default function Home() {
     <section className="search-section"><div className="search-heading"><p className="eyebrow dark">THE SEARCH STARTS HERE</p><h2>What are you looking for?</h2></div>
       <div className="search-panel">
         <label className="keyword"><span>LOCATION OR KEYWORD</span><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Try Chennai, villa, 3 BHK…" /></label>
-        <label><span>CITY</span><select value={city} onChange={e=>setCity(e.target.value)}>{cities.map(c=><option key={c}>{c}</option>)}</select></label>
-        <label><span>PROPERTY TYPE</span><select value={type} onChange={e=>setType(e.target.value)}>{types.map(t=><option key={t}>{t}</option>)}</select></label>
+        <label><span>CITY</span><select value={city} onChange={e=>setCity(e.target.value)}>{["All", ...new Set(sourceProperties.map(p=>p.city))].map(c=><option key={c}>{c}</option>)}</select></label>
+        <label><span>PROPERTY TYPE</span><select value={type} onChange={e=>setType(e.target.value)}>{["All", ...new Set(sourceProperties.map(p=>p.type))].map(t=><option key={t}>{t}</option>)}</select></label>
         <label><span>MAXIMUM BUDGET</span><select value={budget} onChange={e=>setBudget(+e.target.value)}><option value="0">Any budget</option><option value="30">Up to ₹30 L</option><option value="50">Up to ₹50 L</option><option value="100">Up to ₹1 Cr</option><option value="250">Up to ₹2.5 Cr</option><option value="500">Up to ₹5 Cr</option></select></label>
         <label><span>MIN. BEDROOMS</span><select value={minBeds} onChange={e=>setMinBeds(+e.target.value)}><option value="0">Any</option><option value="1">1+ bedroom</option><option value="2">2+ bedrooms</option><option value="3">3+ bedrooms</option><option value="4">4+ bedrooms</option></select></label><label><span>MIN. AREA</span><select value={minArea} onChange={e=>setMinArea(+e.target.value)}><option value="0">Any size</option><option value="1000">1,000+ sq ft</option><option value="1500">1,500+ sq ft</option><option value="2000">2,000+ sq ft</option><option value="3000">3,000+ sq ft</option></select></label><label><span>MAX. AREA</span><select value={maxArea} onChange={e=>setMaxArea(+e.target.value)}><option value="0">Any size</option><option value="1200">Up to 1,200 sq ft</option><option value="2000">Up to 2,000 sq ft</option><option value="3000">Up to 3,000 sq ft</option></select></label><a className="button search-button" href="#properties">Find properties ↗</a>
       </div>
