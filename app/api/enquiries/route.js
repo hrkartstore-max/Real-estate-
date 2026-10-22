@@ -38,6 +38,10 @@ export async function PUT(request) {
   if (!body?.id || !["New", "Contacted", "Closed"].includes(body.status)) return NextResponse.json({ error: "Valid enquiry ID and status are required." }, { status: 400 });
   const db = await getDb();
   if (!db) return NextResponse.json({ error: "Database is not configured." }, { status: 503 });
-  const result = await db.collection("enquiries").updateOne({ id: body.id }, { $set: { status: body.status, updatedAt: new Date() } });
+  const now = new Date();
+  const changes = { status: body.status, updatedAt: now };
+  if (body.status === "Contacted") changes.contactedAt = now;
+  if (body.status === "Closed") changes.closedAt = now;
+  const result = await db.collection("enquiries").updateOne({ id: body.id }, { $set: changes });
   return NextResponse.json({ updated: result.modifiedCount > 0 });
 }
