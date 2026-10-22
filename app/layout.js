@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
   return <html lang="en"><body>
     <header className="nav">
       <Link href="/" className="brand"><span className="brand-mark">H</span><span>HEPRA<small>REALTY</small></span></Link>
-      <nav><a href="/#properties">Properties</a><a href="/#approach">Our approach</a></nav>
+      <nav><a href="/#properties">Properties</a><a href="/#approach">Our approach</a><a href="/account">My account</a></nav>
       <a className="button nav-button" href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noreferrer">Speak with us ↗</a>
     </header>
     {children}
