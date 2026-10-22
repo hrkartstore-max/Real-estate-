@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function SavedSearchAlerts({ city = "All", type = "All", maxPriceLakh = 0 }) {
+export default function SavedSearchAlerts({ city = "All", type = "All", maxPriceLakh = 0, keyword = "", minBeds = 0, minArea = 0, maxArea = 0 }) {
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -18,7 +18,7 @@ export default function SavedSearchAlerts({ city = "All", type = "All", maxPrice
       const response = await fetch("/api/saved-searches", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, city, type, maxPriceLakh, consent })
+        body: JSON.stringify({ email, city, type, maxPriceLakh, keyword, minBeds, minArea, maxArea, consent })
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Could not save this alert.");
@@ -36,8 +36,8 @@ export default function SavedSearchAlerts({ city = "All", type = "All", maxPrice
     <div className="saved-search-copy">
       <p className="eyebrow dark">DON’T MISS THE RIGHT HOME</p>
       <h3 id="saved-search-alert-title">Get new listings <em>by email.</em></h3>
-      <p>We’ll save the filters you’re using and email you when a matching listing is added. Alerts require the site’s email delivery to be configured.</p>
-      <div className="saved-search-summary"><span>{city === "All" ? "All cities" : city}</span><span>{type === "All" ? "All property types" : type}</span><span>{Number(maxPriceLakh) > 0 ? `Up to ₹${maxPriceLakh} L` : "Any budget"}</span></div>
+      <p>We’ll save your active location, type, budget, keyword and size filters, then email you when a matching listing is added. Alerts require the site’s email delivery to be configured.</p>
+      <div className="saved-search-summary"><span>{city === "All" ? "All cities" : city}</span><span>{type === "All" ? "All property types" : type}</span><span>{Number(maxPriceLakh) > 0 ? `Up to ₹${maxPriceLakh} L` : "Any budget"}</span>{keyword.trim()&&<span>Keyword: {keyword.trim()}</span>}{Number(minBeds)>0&&<span>{minBeds}+ beds</span>}{Number(minArea)>0&&<span>{Number(minArea).toLocaleString("en-IN")}+ sq ft</span>}{Number(maxArea)>0&&<span>Up to {Number(maxArea).toLocaleString("en-IN")} sq ft</span>}</div>
     </div>
     <form className="saved-search-form" onSubmit={subscribe}>
       <label htmlFor="saved-search-email">Email address</label>
