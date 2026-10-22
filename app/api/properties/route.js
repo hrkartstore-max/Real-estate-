@@ -3,6 +3,7 @@ import crypto from "node:crypto";
 import { properties as sampleProperties } from "../../../lib/properties";
 import { getDb } from "../../../lib/mongodb";
 import { isAdminRequest } from "../../../lib/auth";
+import { notifySavedSearchSubscribers } from "../../../lib/listing-alerts";
 
 export const dynamic = "force-dynamic";
 const collection = async () => {
@@ -38,7 +39,8 @@ export async function POST(request) {
   if (body.verified === true && !REQUIRED_VERIFICATION_DOCS.every(x => verificationDocuments.includes(x))) return NextResponse.json({ error: "Complete all four document checks before marking this listing verified." }, { status: 400 });
   const doc = { ...body, verificationDocuments, verified: body.verified === true, address: String(body.address || "").trim().slice(0, 250), latitude: body.latitude === "" || body.latitude == null ? null : Number(body.latitude), longitude: body.longitude === "" || body.longitude == null ? null : Number(body.longitude), id: body.id || crypto.randomUUID(), price: Number(body.price), area: Number(body.area), beds: Number(body.beds || 0), baths: Number(body.baths || 0), updatedAt: new Date() };
   await col.updateOne({ id: doc.id }, { $set: doc }, { upsert: true });
-  return NextResponse.json({ property: doc }, { status: 201 });
+  const alerts = await notifySavedSearchSubscribers(doc).catch(() => ({ configured: false, sent: 0 }));
+  return NextResponse.json({ property: doc, alerts: { configured: alerts.configured, sent: alerts.sent } }, { status: 201 });
 }
 export async function PUT(request) {
   if (!isAdminRequest(request)) return NextResponse.json({ error: "Authentication required." }, { status: 401 });
