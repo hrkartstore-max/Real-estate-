@@ -148,3 +148,11 @@ input:focus,select:focus,textarea:focus{border-color:#a58a57!important;box-shado
 .mortgage-cta:hover:not(:disabled){background:#e6d7b9;color:var(--deep)}
 .mortgage-disclaimer{font-size:9px;line-height:1.7;color:var(--muted);margin:15px 0 0}
 @media(max-width:680px){.mortgage-calculator{margin:26px 0;padding:18px}.mortgage-layout{grid-template-columns:1fr;gap:20px}.mortgage-result{padding:19px}.mortgage-emi{font-size:31px}}
+
+
+/* Save and share controls on property detail pages */
+.property-actions{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:0 0 20px}
+.property-action{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:38px;padding:9px 13px;border:1px solid var(--line);background:var(--white);color:var(--forest);font-size:10px;font-weight:600;transition:background .2s,border-color .2s,transform .2s}
+.property-action:hover{background:#eeefe8;border-color:#c4b38d;transform:translateY(-1px)}
+.property-action.is-saved{background:#fff0ed;color:#a34b42;border-color:#f0d6d1}
+.property-action-message{flex-basis:100%;margin:0;color:var(--muted);font-size:10px;line-height:1.5}
