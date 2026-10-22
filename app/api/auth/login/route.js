@@ -1,8 +1,19 @@
 import { NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { createSession, sessionCookieName } from "../../../../lib/auth";
+import { checkRateLimit } from "../../../../lib/rate-limit";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request) {
+  const rate = await checkRateLimit(request, "admin-login", 10);
+  if (rate.limited) {
+    return NextResponse.json(
+      { error: "Too many sign-in attempts. Please wait before trying again." },
+      { status: 429, headers: { "Retry-After": String(rate.retryAfterSeconds) } }
+    );
+  }
+
   const { email = "", password = "" } = await request.json().catch(() => ({}));
   const expectedEmail = process.env.ADMIN_EMAIL || "";
   const expectedPassword = process.env.ADMIN_PASSWORD || "";
