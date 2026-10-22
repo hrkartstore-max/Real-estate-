@@ -36,7 +36,7 @@ export default function SavedSearchAlerts({ city = "All", type = "All", maxPrice
     <div className="saved-search-copy">
       <p className="eyebrow dark">DON’T MISS THE RIGHT HOME</p>
       <h3 id="saved-search-alert-title">Get new listings <em>by email.</em></h3>
-      <p>We’ll save your active location, type, budget, keyword and size filters, then email you when a matching listing is added. Alerts require the site’s email delivery to be configured.</p>
+      <p>We’ll save your active location, type, budget, keyword, bedroom and size filters, then email you when a matching listing is added. You can unsubscribe at any time. Email delivery must be configured by the site owner.</p>
       <div className="saved-search-summary"><span>{city === "All" ? "All cities" : city}</span><span>{type === "All" ? "All property types" : type}</span><span>{Number(maxPriceLakh) > 0 ? `Up to ₹${maxPriceLakh} L` : "Any budget"}</span>{keyword.trim()&&<span>Keyword: {keyword.trim()}</span>}{Number(minBeds)>0&&<span>{minBeds}+ beds</span>}{Number(minArea)>0&&<span>{Number(minArea).toLocaleString("en-IN")}+ sq ft</span>}{Number(maxArea)>0&&<span>Up to {Number(maxArea).toLocaleString("en-IN")} sq ft</span>}</div>
     </div>
     <form className="saved-search-form" onSubmit={subscribe}>
