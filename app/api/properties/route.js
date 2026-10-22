@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import crypto from "node:crypto";
 import { properties as sampleProperties } from "../../../lib/properties";
 import { getDb } from "../../../lib/mongodb";
 import { isAdminRequest } from "../../../lib/auth";
