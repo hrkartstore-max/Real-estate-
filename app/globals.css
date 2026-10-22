@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
+
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
 :root{--ink:#202c27;--forest:#213b31;--deep:#172b23;--paper:#f6f4ee;--white:#fffefa;--gold:#b79a62;--muted:#777c72;--line:#deded5;--serif:"Playfair Display",Georgia,serif;--sans:"DM Sans",Arial,sans-serif}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:88px}body{margin:0;background:var(--paper);color:var(--ink);font:400 14px/1.65 var(--sans);-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}button{cursor:pointer} :focus-visible{outline:3px solid var(--gold);outline-offset:3px}h1,h2,h3,p{margin-top:0}h1,h2{font-family:var(--serif);font-weight:500;letter-spacing:-.045em;line-height:1.1}h1 em,h2 em{color:var(--gold);font-weight:500}.wrap{width:min(1240px,calc(100% - 64px));margin:auto}.eyebrow{font-size:9px;letter-spacing:.18em;font-weight:700;color:#d4c39c;margin:0 0 20px}.eyebrow span{display:inline-block;width:26px;height:1px;background:var(--gold);margin-right:10px;vertical-align:middle}.eyebrow.dark{color:#8c7549}.muted{color:var(--muted);font-size:12px}
@@ -39,3 +41,52 @@ body{font-family:var(--sans);letter-spacing:-.01em}
 .admin-leads{grid-column:1/-1}.admin-leads .admin-item select{border:1px solid var(--line);padding:8px;background:var(--white);font-size:10px;color:var(--ink);max-width:130px}
 
 .account-card .account-saved{padding:18px;border:1px solid var(--line);background:#f5f4ed;display:flex;flex-direction:column;align-items:flex-start;gap:10px}.account-saved strong{font:22px var(--serif);color:var(--forest)}.account-saved p{font-size:11px;line-height:1.7;color:var(--muted);margin:0}.account-saved .button{margin-top:3px}
+
+
+/* HEPRA Realty — Poppins-led visual system and motion polish */
+:root{--serif:"Poppins",sans-serif;--sans:"Poppins",sans-serif;--font-body:"Poppins",sans-serif}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{font-family:"Poppins",sans-serif;letter-spacing:-.012em}
+h1,h2,h3,h4,.brand,.eyebrow,.button,.nav,.property-card,.detail-page,.auth-card,.admin-wrap{font-family:"Poppins",sans-serif}
+h1,h2,h3{letter-spacing:-.045em}
+h1{font-weight:600}
+h2{font-weight:500}
+p,.lead{letter-spacing:-.01em}
+::selection{background:#c4a66b;color:#16372b}
+a,button,input,select,textarea,.property-card,.category-card,.brand-mark{transition:color .22s ease,background-color .22s ease,border-color .22s ease,box-shadow .28s ease,transform .28s cubic-bezier(.2,.75,.25,1),opacity .22s ease}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #b9985e;outline-offset:3px}
+button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.nav{animation:navDrop .7s cubic-bezier(.2,.75,.25,1) both}
+.hero-copy>*{animation:riseIn .72s cubic-bezier(.2,.75,.25,1) both}
+.hero-copy>*:nth-child(2){animation-delay:.08s}
+.hero-copy>*:nth-child(3){animation-delay:.16s}
+.hero-copy>*:nth-child(4){animation-delay:.24s}
+.hero-art,.hero-visual{animation:softReveal 1s .1s ease both}
+.property-card,.category-card{animation:cardEnter .55s both}
+.property-card:hover,.category-card:hover{transform:translateY(-5px);box-shadow:0 18px 42px #1d3b2a14}
+.property-card img,.property-card .art,.category-card img{transition:transform .65s cubic-bezier(.2,.75,.25,1)}
+.property-card:hover img,.property-card:hover .art,.category-card:hover img{transform:scale(1.035)}
+.button{position:relative;overflow:hidden;isolation:isolate}
+.button:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 15%,#ffffff2b 45%,transparent 75%);transform:translateX(-130%);transition:transform .7s ease;z-index:-1}
+.button:hover:before{transform:translateX(130%)}
+.button:hover{transform:translateY(-2px);box-shadow:0 9px 22px #153c2b24}
+.button:active{transform:translateY(0) scale(.985)}
+.brand-mark{transition:transform .35s ease,background .25s ease}
+.brand:hover .brand-mark{transform:rotate(-7deg) scale(1.06)}
+.search-panel,.filters,.detail-columns,.admin-layout,.admin-list,.admin-form{animation:riseIn .6s .08s both}
+.enquiry,.auth-card{animation:riseIn .6s ease both}
+.compare-dock{animation:riseIn .25s ease both}
+.modal-backdrop{animation:fadeIn .2s ease both}
+.modal-panel{animation:modalUp .28s cubic-bezier(.2,.75,.25,1) both}
+.admin-item{transition:background .2s ease,padding .2s ease}
+.admin-item:hover{background:#f7f6f0;padding-left:9px;padding-right:9px}
+input,select,textarea{transition:border-color .2s ease,box-shadow .2s ease,background .2s ease}
+input:focus,select:focus,textarea:focus{border-color:#a58a57!important;box-shadow:0 0 0 3px #b89a5b1b;outline:none}
+@keyframes riseIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes softReveal{from{opacity:0;transform:scale(.975)}to{opacity:1;transform:scale(1)}}
+@keyframes navDrop{from{opacity:0;transform:translateY(-9px)}to{opacity:1;transform:translateY(0)}}
+@keyframes cardEnter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes modalUp{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(hover:none){.property-card:hover,.category-card:hover,.button:hover{transform:none;box-shadow:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
