@@ -17,9 +17,9 @@ export async function generateMetadata({ params }) {
     const db = await getDb();
     if (db) p = await db.collection("properties").findOne({ id: params.id }) || p;
   } catch { /* Sample metadata remains available if MongoDB is offline. */ }
-  if (!p) return { title: "Property not found | Hepra Realty", robots: { index: false, follow: false } };
+  if (!p) return { title: "Property not found", robots: { index: false, follow: false } };
   const verified = isVerifiedListing(p);
-  const title = `${p.title} in ${p.city} | Hepra Realty`;
+  const title = `${p.title} in ${p.city}`;
   const description = `${p.title} in ${p.city}, Tamil Nadu. ${p.area.toLocaleString("en-IN")} sq ft, ${fmt(p.price)}. ${verified ? "Listing marked verified by the listing administrator." : "Illustrative listing; independently verify property details."} ${p.blurb || ""}`.slice(0, 300);
   const url = `/property/${p.id}`;
   return {
