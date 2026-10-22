@@ -1,8 +1,7 @@
-export default function LocationMap({ city, address, latitude, longitude, verified }) {
-  const hasExactPin = verified === true && Boolean(String(address || "").trim()) &&
-    Number.isFinite(Number(latitude)) && Number(latitude) >= -90 && Number(latitude) <= 90 &&
-    Number.isFinite(Number(longitude)) && Number(longitude) >= -180 && Number(longitude) <= 180 &&
-    latitude !== null && latitude !== "" && longitude !== null && longitude !== "";
+import { hasVerifiedCoordinates } from "../lib/verification";
+
+export default function LocationMap({ city, address, latitude, longitude, verified, verificationDocuments }) {
+  const hasExactPin = hasVerifiedCoordinates({ verified, address, latitude, longitude, verificationDocuments });
   const location = hasExactPin ? `${Number(latitude)},${Number(longitude)}` : [city, "Tamil Nadu", "India"].filter(Boolean).join(", ");
   const query = encodeURIComponent(location);
   const mapLabel = hasExactPin ? address : `${city}, Tamil Nadu`;
