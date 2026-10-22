@@ -11,8 +11,9 @@ export default function Enquiry({ subject }) {
   async function send() {
     if (!valid) return;
     const message = `Hello ${SITE.name}, I'm ${name} (${phone}). I'm interested in: ${subject}.${note.trim() ? ` Message: ${note.trim()}` : ""}`;
+    const waUrl = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(message)}`;
+    window.open(waUrl, "_blank", "noopener,noreferrer");
     try { await fetch("/api/enquiries", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, phone, note, subject }) }); } catch { /* WhatsApp enquiry remains available if storage is offline. */ }
-    window.open(`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
   }
   return <aside className="enquiry">
     <p className="eyebrow">LET’S TALK PROPERTY</p><h2>Make an enquiry.</h2>
