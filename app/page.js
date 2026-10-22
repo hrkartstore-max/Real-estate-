@@ -21,6 +21,7 @@ export default function Home() {
   const [sort, setSort] = useState("featured");
   const [favorites, setFavorites] = useState([]);
   const [favoritesLoaded, setFavoritesLoaded] = useState(false);
+  const [customerSignedIn, setCustomerSignedIn] = useState(false);
   useEffect(() => {
     try {
       const saved = window.localStorage.getItem("hepra-realty-saved-homes");
@@ -41,6 +42,8 @@ export default function Home() {
       // Saving is best-effort when storage is disabled or full.
     }
   }, [favorites, favoritesLoaded]);
+  useEffect(() => { fetch("/api/account/saved").then(r => r.ok ? r.json() : null).then(data => { if (data?.authenticated) { setCustomerSignedIn(true); setFavorites(old => [...new Set([...old, ...(data.savedPropertyIds || [])])]); } }).catch(() => {}); }, []);
+  useEffect(() => { if (!favoritesLoaded || !customerSignedIn) return; fetch("/api/account/saved", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ savedPropertyIds: favorites }) }).catch(() => {}); }, [favorites, favoritesLoaded, customerSignedIn]);
   const [compare, setCompare] = useState([]);
   const [showCompare, setShowCompare] = useState(false);
   const [showSavedOnly, setShowSavedOnly] = useState(false);
