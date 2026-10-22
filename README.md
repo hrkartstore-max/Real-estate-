@@ -10,8 +10,8 @@ Premium editorial real-estate discovery website built with Next.js 14 App Router
 - Customer registration/login with salted password hashes, account-specific saved homes, and cross-device wishlist sync.
 - Admin listing management, document verification checklist, exact verified map pins, and enquiry follow-up dashboard.
 - WhatsApp follow-up links and lead analytics (new, contacted, closed, recent leads, close rate and top enquiry subjects).
-- Saved-search email alerts for city, property type and budget matches, with unsubscribe links.
-- Property-specific SEO metadata, canonical URLs, social-sharing previews and a sitemap that includes verified listings only.
+- Saved-search email alerts for city, property type, budget, keyword, bedroom and area matches, with unsubscribe confirmation.
+- Property-specific SEO metadata, canonical URLs, dynamic Open Graph/Twitter sharing cards and a sitemap that includes verified listings only.
 - MongoDB-backed properties and enquiries API; sample listings are shown when the database is not configured or has no records.
 - SEO metadata, sitemap and robots rules.
 
