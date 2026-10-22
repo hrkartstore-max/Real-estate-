@@ -19,10 +19,15 @@ export default function Home() {
   const [budget, setBudget] = useState(0);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("featured");
+  const [favorites, setFavorites] = useState([]);
+  const [compare, setCompare] = useState([]);
+  const [showCompare, setShowCompare] = useState(false);
+  const [showSavedOnly, setShowSavedOnly] = useState(false);
   const listings = useMemo(() => {
     const found = properties.filter(p =>
       (city === "All" || p.city === city) &&
       (type === "All" || p.type === type) &&
+      (!showSavedOnly || favorites.includes(p.id)) &&
       (!budget || p.price <= budget) &&
       `${p.title} ${p.city} ${p.type} ${p.area}`.toLowerCase().includes(query.toLowerCase().trim())
     );
@@ -30,8 +35,11 @@ export default function Home() {
     if (sort === "high") found.sort((a,b) => b.price-a.price);
     if (sort === "area") found.sort((a,b) => b.area-a.area);
     return found;
-  }, [city,type,budget,query,sort]);
-  const reset = () => { setCity("All"); setType("All"); setBudget(0); setQuery(""); setSort("featured"); };
+  }, [city,type,budget,query,sort,showSavedOnly,favorites]);
+  const reset = () => { setCity("All"); setType("All"); setBudget(0); setQuery(""); setSort("featured"); setShowSavedOnly(false); };
+  const toggleFavorite = (id) => setFavorites(old => old.includes(id) ? old.filter(x => x !== id) : [...old,id]);
+  const toggleCompare = (id) => setCompare(old => old.includes(id) ? old.filter(x => x !== id) : old.length < 3 ? [...old,id] : old);
+  const compared = properties.filter(p => compare.includes(p.id));
 
   return <main>
     <section className="hero"><div className="hero-photo" /><div className="hero-overlay" /><div className="hero-content">
@@ -57,14 +65,16 @@ export default function Home() {
     <section className="categories wrap">{categories.map(c=><button key={c.type} className={`category ${type===c.type?"active":""}`} onClick={()=>{setType(type===c.type?"All":c.type);document.getElementById("properties")?.scrollIntoView({behavior:"smooth"});}}><span className="category-icon">{c.icon}</span><strong>{c.title}</strong><small>{c.desc}</small><i>↗</i></button>)}</section>
 
     <section className="collection" id="properties"><div className="wrap"><div className="section-head"><div><p className="eyebrow dark">THE HEPRA COLLECTION</p><h2>Properties with <em>possibility.</em></h2><p className="muted">Explore homes and land across Tamil Nadu.</p></div><label className="sort"><span>SORT BY</span><select value={sort} onChange={e=>setSort(e.target.value)}><option value="featured">Curated order</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="area">Largest area</option></select></label></div>
-      <div className="result-line"><span><b>{String(listings.length).padStart(2,"0")}</b> properties to explore</span><button onClick={reset}>Reset filters ↺</button></div>
+      <div className="result-line"><span><b>{String(listings.length).padStart(2,"0")}</b> properties to explore</span><div className="result-actions"><button className={showSavedOnly?"toolbar-active":""} onClick={()=>setShowSavedOnly(v=>!v)}>♡ Saved homes ({favorites.length})</button><button onClick={reset}>Reset filters ↺</button></div></div>
       {listings.length===0&&<div className="empty"><h3>No properties found</h3><p>Try a different location, type or budget.</p><button className="button" onClick={reset}>Clear all filters</button></div>}
-      <div className="property-grid">{listings.map((p,i)=><Link className="property-card" href={`/property/${p.id}`} key={p.id}><div className="property-image"><Art type={p.type}/><span className="number">0{i+1}</span><span className="type-pill">{p.type}</span><span className="open-arrow">↗</span></div><div className="property-info"><p className="location">⌖ {p.city} <span>/</span> {p.area.toLocaleString("en-IN")} sq ft</p><h3>{p.title}</h3><div className="price-row"><strong>{fmt(p.price)}</strong><small>{p.beds ? `${p.beds} bed · ${p.baths} bath` : "Residential land"}</small></div></div></Link>)}</div>
+      <div className="property-grid">{listings.map((p,i)=><article className="property-card" key={p.id}><Link className="property-image-link" href={`/property/${p.id}`}><div className="property-image"><Art type={p.type}/><span className="number">0{i+1}</span><span className="type-pill">{p.type}</span><span className="open-arrow">↗</span></div></Link><button aria-label="Save property" className={`favorite-button ${favorites.includes(p.id)?"is-favorite":""}`} onClick={()=>toggleFavorite(p.id)}>{favorites.includes(p.id)?"♥":"♡"}</button><div className="property-info"><p className="location">⌖ {p.city} <span>/</span> {p.area.toLocaleString("en-IN")} sq ft</p><Link href={`/property/${p.id}`}><h3>{p.title}</h3></Link><div className="property-features"><span>{p.beds ? `${p.beds} bed` : "Land"}</span>{p.baths>0&&<span>{p.baths} bath</span>}<span>{p.area.toLocaleString("en-IN")} sq ft</span></div><div className="price-row"><strong>{fmt(p.price)}</strong><label className="compare-check"><input type="checkbox" checked={compare.includes(p.id)} onChange={()=>toggleCompare(p.id)} disabled={!compare.includes(p.id)&&compare.length>=3}/> Compare</label></div></div></article>)}</div>
       <p className="sample-note">Illustrative sample listings only. Verify availability, price, title and approvals independently before making a decision.</p>
     </div></section>
 
     <section className="approach" id="approach"><div className="approach-image"><div className="monogram"><span>H</span><small>HEPRA REALTY</small></div></div><div className="approach-copy"><p className="eyebrow">THE HEPRA APPROACH</p><h2>Good decisions<br/>start with <em>clarity.</em></h2><p>Property is personal. We believe the process should feel considered, transparent and centred around what you need next.</p><div className="steps"><div><b>01</b><span><strong>Start with your priorities</strong><small>Location, lifestyle and budget come first.</small></span></div><div><b>02</b><span><strong>Ask the right questions</strong><small>Request documentation and verify every detail.</small></span></div><div><b>03</b><span><strong>Move at your own pace</strong><small>Make an informed choice, without the rush.</small></span></div></div><a className="underlink" href={`https://wa.me/918124262289`} target="_blank" rel="noreferrer">Talk to our team <span>↗</span></a></div></section>
 
     <section className="closing"><p className="eyebrow dark">YOUR NEXT CHAPTER BEGINS HERE</p><h2>Let’s find the <em>right place.</em></h2><p>Tell us what you have in mind. We’ll help you take the next step.</p><a className="button" href="https://wa.me/918124262289" target="_blank" rel="noreferrer">Start a conversation ↗</a></section>
+    {compare.length>0&&<aside className="compare-dock"><div><b>{compare.length} / 3 selected</b><span>Select at least two homes to compare.</span></div><div className="dock-actions"><button className="dock-clear" onClick={()=>setCompare([])}>Clear</button><button className="button" disabled={compare.length<2} onClick={()=>setShowCompare(true)}>Compare homes ↗</button></div></aside>}
+    {showCompare&&<div className="modal-backdrop" onClick={e=>{if(e.target===e.currentTarget)setShowCompare(false);}}><section className="compare-modal" role="dialog" aria-modal="true" aria-labelledby="compare-title"><div className="modal-head"><div><p className="eyebrow dark">SIDE-BY-SIDE VIEW</p><h2 id="compare-title">Compare properties.</h2></div><button className="modal-close" onClick={()=>setShowCompare(false)} aria-label="Close comparison">×</button></div><div className="compare-table">{[["Property",p=>p.title],["Location",p=>p.city],["Price",p=>fmt(p.price)],["Type",p=>p.type],["Area",p=>p.area.toLocaleString("en-IN")+" sq ft"],["Bedrooms",p=>p.beds||"—"],["Bathrooms",p=>p.baths||"—"]].map(([label,value])=><div className="compare-row" key={label}><span>{label}</span>{compared.map(p=><b key={p.id}>{value(p)}</b>)}</div>)}</div><div className="modal-foot"><p className="muted">Sample figures only; verify all listing details.</p><button className="button" onClick={()=>setShowCompare(false)}>Done</button></div></section></div>}
   </main>;
 }
