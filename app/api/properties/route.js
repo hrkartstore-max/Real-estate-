@@ -9,10 +9,13 @@ const collection = async () => {
   const db = await getDb();
   return db ? db.collection("properties") : null;
 };
+const REQUIRED_VERIFICATION_DOCS = ["ownershipProof", "approvalDocuments", "encumbranceCertificate", "propertyTaxReceipt"];
 function validProperty(p) {
   return p && typeof p.title === "string" && p.title.trim() && typeof p.city === "string" && p.city.trim() &&
     ["Apartment", "Villa", "House", "Plot"].includes(p.type) && Number.isFinite(Number(p.price)) && Number(p.price) > 0 &&
-    Number.isFinite(Number(p.area)) && Number(p.area) > 0;
+    Number.isFinite(Number(p.area)) && Number(p.area) > 0 &&
+    (p.latitude == null || p.latitude === "" || (Number.isFinite(Number(p.latitude)) && Number(p.latitude >= -90) && Number(p.latitude) <= 90)) &&
+    (p.longitude == null || p.longitude === "" || (Number.isFinite(Number(p.longitude)) && Number(p.longitude) >= -180 && Number(p.longitude) <= 180));
 }
 export async function GET() {
   try {
@@ -31,7 +34,9 @@ export async function POST(request) {
   if (!validProperty(body)) return NextResponse.json({ error: "Provide a title, city, valid type, positive price and area." }, { status: 400 });
   const col = await collection();
   if (!col) return NextResponse.json({ error: "Database is not configured. Add MONGODB_URI before managing live listings." }, { status: 503 });
-  const doc = { ...body, id: body.id || crypto.randomUUID(), price: Number(body.price), area: Number(body.area), beds: Number(body.beds || 0), baths: Number(body.baths || 0), updatedAt: new Date() };
+  const verificationDocuments = Array.isArray(body.verificationDocuments) ? body.verificationDocuments.filter(x => REQUIRED_VERIFICATION_DOCS.includes(x)) : [];
+  if (body.verified === true && !REQUIRED_VERIFICATION_DOCS.every(x => verificationDocuments.includes(x))) return NextResponse.json({ error: "Complete all four document checks before marking this listing verified." }, { status: 400 });
+  const doc = { ...body, verificationDocuments, verified: body.verified === true, address: String(body.address || "").trim().slice(0, 250), latitude: body.latitude === "" || body.latitude == null ? null : Number(body.latitude), longitude: body.longitude === "" || body.longitude == null ? null : Number(body.longitude), id: body.id || crypto.randomUUID(), price: Number(body.price), area: Number(body.area), beds: Number(body.beds || 0), baths: Number(body.baths || 0), updatedAt: new Date() };
   await col.updateOne({ id: doc.id }, { $set: doc }, { upsert: true });
   return NextResponse.json({ property: doc }, { status: 201 });
 }
@@ -41,7 +46,9 @@ export async function PUT(request) {
   if (!validProperty(body) || typeof body.id !== "string" || !body.id) return NextResponse.json({ error: "A valid property ID and listing fields are required." }, { status: 400 });
   const col = await collection();
   if (!col) return NextResponse.json({ error: "Database is not configured. Add MONGODB_URI before managing live listings." }, { status: 503 });
-  const doc = { ...body, price: Number(body.price), area: Number(body.area), beds: Number(body.beds || 0), baths: Number(body.baths || 0), updatedAt: new Date() };
+  const verificationDocuments = Array.isArray(body.verificationDocuments) ? body.verificationDocuments.filter(x => REQUIRED_VERIFICATION_DOCS.includes(x)) : [];
+  if (body.verified === true && !REQUIRED_VERIFICATION_DOCS.every(x => verificationDocuments.includes(x))) return NextResponse.json({ error: "Complete all four document checks before marking this listing verified." }, { status: 400 });
+  const doc = { ...body, verificationDocuments, verified: body.verified === true, address: String(body.address || "").trim().slice(0, 250), latitude: body.latitude === "" || body.latitude == null ? null : Number(body.latitude), longitude: body.longitude === "" || body.longitude == null ? null : Number(body.longitude), price: Number(body.price), area: Number(body.area), beds: Number(body.beds || 0), baths: Number(body.baths || 0), updatedAt: new Date() };
   await col.updateOne({ id: doc.id }, { $set: doc }, { upsert: true });
   return NextResponse.json({ property: doc });
 }
