@@ -57,10 +57,37 @@ a,button,input,select,textarea,.property-card,.category-card,.brand-mark{transit
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #b9985e;outline-offset:3px}
 button:disabled{opacity:.55;cursor:not-allowed;transform:none}
 .nav{animation:navDrop .7s cubic-bezier(.2,.75,.25,1) both}
-.hero-copy>*{animation:riseIn .72s cubic-bezier(.2,.75,.25,1) both}
-.hero-copy>*:nth-child(2){animation-delay:.08s}
-.hero-copy>*:nth-child(3){animation-delay:.16s}
-.hero-copy>*:nth-child(4){animation-delay:.24s}
+.hero-content>*{animation:riseIn .72s cubic-bezier(.2,.75,.25,1) both}
+.hero-content>*:nth-child(1){animation-delay:.04s}
+.hero-content>*:nth-child(2){animation-delay:.12s}
+.hero-content>*:nth-child(3){animation-delay:.2s}
+.hero-content>*:nth-child(4){animation-delay:.28s}
+.hero-content>*:nth-child(5){animation-delay:.36s}
+.hero-photo{transform:scale(1.025);animation:heroDrift 18s ease-in-out infinite alternate}
+.hero-overlay{background:linear-gradient(90deg,rgba(13,31,23,.93),rgba(20,39,30,.68) 43%,rgba(20,39,30,.14)),linear-gradient(0deg,rgba(18,32,25,.34),transparent 56%)}
+.hero h1 em{display:inline-block;transition:color .3s ease,transform .35s ease}
+.hero h1:hover em{transform:translateX(5px);color:#ecd8ad}
+.hero-caption{animation:fadeIn .9s .4s both}
+.search-heading,.intro,.section-head{position:relative}
+.search-heading h2,.intro h2,.section-head h2,.closing h2{transition:letter-spacing .35s ease}
+.search-heading:hover h2,.intro:hover h2,.section-head:hover h2,.closing:hover h2{letter-spacing:-.055em}
+.category{position:relative;overflow:hidden;transition:transform .28s ease,background .28s ease,box-shadow .28s ease}
+.category:after{content:"";position:absolute;inset:auto auto 0 0;width:100%;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+.category:hover:after,.category.active:after{transform:scaleX(1)}
+.category-icon{transition:transform .3s ease,color .3s ease}
+.category:hover .category-icon{transform:translateY(-3px) rotate(-5deg);color:var(--gold)}
+.property-grid .property-card:nth-child(3n+2){animation-delay:.08s}
+.property-grid .property-card:nth-child(3n){animation-delay:.16s}
+.property-image .art img{transition:transform .8s cubic-bezier(.2,.75,.25,1),filter .4s ease}
+.property-card:hover .property-image .art img{filter:saturate(1.08)}
+.approach-image{overflow:hidden}
+.approach-image:after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#d8c49b16,transparent 50%);pointer-events:none}
+.approach-image,.approach-copy,.closing{animation:riseIn .65s both}
+.steps>div{transition:padding-left .25s ease,background .25s ease}
+.steps>div:hover{padding-left:8px;background:#ffffff08}
+.hero-sign>span{transition:transform .3s ease,background .3s ease}
+.hero-sign:hover>span{transform:rotate(-8deg);background:#ffffff12}
+
 .hero-art,.hero-visual{animation:softReveal 1s .1s ease both}
 .property-card,.category-card{animation:cardEnter .55s both}
 .property-card:hover,.category-card:hover{transform:translateY(-5px);box-shadow:0 18px 42px #1d3b2a14}
@@ -90,3 +117,7 @@ input:focus,select:focus,textarea:focus{border-color:#a58a57!important;box-shado
 @keyframes modalUp{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 @media(hover:none){.property-card:hover,.category-card:hover,.button:hover{transform:none;box-shadow:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+@keyframes heroDrift{from{transform:scale(1.025) translate3d(0,0,0)}to{transform:scale(1.09) translate3d(-.6%,.5%,0)}}
+@media(max-width:680px){.hero-photo{animation:none;transform:none}.hero-content>*{animation-duration:.5s}.property-grid .property-card:nth-child(n){animation-delay:0s}}
+@media(prefers-reduced-motion:reduce){.hero-photo{animation:none;transform:none}}
