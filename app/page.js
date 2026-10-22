@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { properties, cities, types } from "../lib/properties";
 import { fmt } from "../lib/site";
@@ -20,6 +20,27 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("featured");
   const [favorites, setFavorites] = useState([]);
+  const [favoritesLoaded, setFavoritesLoaded] = useState(false);
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem("hepra-realty-saved-homes");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) setFavorites(parsed.filter(id => properties.some(p => p.id === id)));
+      }
+    } catch (error) {
+      // Keep saved homes usable if browser storage is unavailable.
+    }
+    setFavoritesLoaded(true);
+  }, []);
+  useEffect(() => {
+    if (!favoritesLoaded) return;
+    try {
+      window.localStorage.setItem("hepra-realty-saved-homes", JSON.stringify(favorites));
+    } catch (error) {
+      // Saving is best-effort when storage is disabled or full.
+    }
+  }, [favorites, favoritesLoaded]);
   const [compare, setCompare] = useState([]);
   const [showCompare, setShowCompare] = useState(false);
   const [showSavedOnly, setShowSavedOnly] = useState(false);
