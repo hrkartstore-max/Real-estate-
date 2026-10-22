@@ -170,3 +170,14 @@ input:focus,select:focus,textarea:focus{border-color:#a58a57!important;box-shado
 .location-map-frame iframe{width:100%;height:100%;border:0;display:block}
 .location-map-note{font-size:9px;color:var(--muted);line-height:1.7;margin:12px 0 0}
 @media(max-width:680px){.location-map{padding:16px}.location-map-heading{align-items:flex-start;flex-direction:column;gap:14px}.location-map-heading .button{min-height:40px}.location-map-frame{height:245px}}
+
+
+/* Lead pipeline search and status overview */
+.lead-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 18px}
+.lead-stats>div{padding:13px;background:#f1f1e9;border:1px solid var(--line);display:flex;flex-direction:column;gap:3px}
+.lead-stats strong{font-size:24px;line-height:1.2;color:var(--forest)}
+.lead-stats span{font-size:9px;color:var(--muted)}
+.lead-toolbar{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:12px;margin:0 0 12px}
+.lead-toolbar label{display:flex;flex-direction:column;gap:6px;font-size:9px;font-weight:700;color:#526056}
+.lead-toolbar input,.lead-toolbar select{width:100%;min-width:0;border:1px solid var(--line);padding:11px;background:var(--white);color:var(--ink);font-size:11px}
+@media(max-width:560px){.lead-toolbar{grid-template-columns:1fr}.lead-stats>div{padding:10px}.lead-stats strong{font-size:21px}}
