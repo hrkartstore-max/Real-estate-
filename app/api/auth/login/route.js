@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import crypto from "node:crypto";
 import { createSession, sessionCookieName } from "../../../../lib/auth";
 
 export async function POST(request) {
@@ -10,7 +11,7 @@ export async function POST(request) {
   }
   const normalize = value => Buffer.from(String(value));
   const emailOk = String(email).trim().toLowerCase() === expectedEmail.trim().toLowerCase();
-  const passwordOk = normalize(password).length === normalize(expectedPassword).length && require("node:crypto").timingSafeEqual(normalize(password), normalize(expectedPassword));
+  const passwordOk = normalize(password).length === normalize(expectedPassword).length && crypto.timingSafeEqual(normalize(password), normalize(expectedPassword));
   if (!emailOk || !passwordOk) return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
   const response = NextResponse.json({ ok: true });
   response.cookies.set(sessionCookieName, createSession(expectedEmail), { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 60 * 60 * 12 });
