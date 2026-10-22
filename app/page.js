@@ -44,23 +44,31 @@ export default function Home() {
   const [compare, setCompare] = useState([]);
   const [showCompare, setShowCompare] = useState(false);
   const [showSavedOnly, setShowSavedOnly] = useState(false);
+  const [minBeds, setMinBeds] = useState(0);
+  const [minArea, setMinArea] = useState(0);
+  const [maxArea, setMaxArea] = useState(0);
+  const [sourceProperties, setSourceProperties] = useState(properties);
+  useEffect(() => { fetch("/api/properties").then(r => r.ok ? r.json() : null).then(data => { if (Array.isArray(data?.properties) && data.properties.length) setSourceProperties(data.properties); }).catch(() => {}); }, []);
   const listings = useMemo(() => {
-    const found = properties.filter(p =>
+    const found = sourceProperties.filter(p =>
       (city === "All" || p.city === city) &&
       (type === "All" || p.type === type) &&
       (!showSavedOnly || favorites.includes(p.id)) &&
       (!budget || p.price <= budget) &&
+      (!minBeds || (p.beds || 0) >= minBeds) &&
+      (!minArea || p.area >= minArea) &&
+      (!maxArea || p.area <= maxArea) &&
       `${p.title} ${p.city} ${p.type} ${p.area}`.toLowerCase().includes(query.toLowerCase().trim())
     );
     if (sort === "low") found.sort((a,b) => a.price-b.price);
     if (sort === "high") found.sort((a,b) => b.price-a.price);
     if (sort === "area") found.sort((a,b) => b.area-a.area);
     return found;
-  }, [city,type,budget,query,sort,showSavedOnly,favorites]);
-  const reset = () => { setCity("All"); setType("All"); setBudget(0); setQuery(""); setSort("featured"); setShowSavedOnly(false); };
+  }, [city,type,budget,query,sort,showSavedOnly,favorites,minBeds,minArea,maxArea,sourceProperties]);
+  const reset = () => { setCity("All"); setType("All"); setBudget(0); setQuery(""); setSort("featured"); setShowSavedOnly(false); setMinBeds(0); setMinArea(0); setMaxArea(0); };
   const toggleFavorite = (id) => setFavorites(old => old.includes(id) ? old.filter(x => x !== id) : [...old,id]);
   const toggleCompare = (id) => setCompare(old => old.includes(id) ? old.filter(x => x !== id) : old.length < 3 ? [...old,id] : old);
-  const compared = properties.filter(p => compare.includes(p.id));
+  const compared = sourceProperties.filter(p => compare.includes(p.id));
 
   return <main>
     <section className="hero"><div className="hero-photo" /><div className="hero-overlay" /><div className="hero-content">
@@ -77,7 +85,7 @@ export default function Home() {
         <label><span>CITY</span><select value={city} onChange={e=>setCity(e.target.value)}>{cities.map(c=><option key={c}>{c}</option>)}</select></label>
         <label><span>PROPERTY TYPE</span><select value={type} onChange={e=>setType(e.target.value)}>{types.map(t=><option key={t}>{t}</option>)}</select></label>
         <label><span>MAXIMUM BUDGET</span><select value={budget} onChange={e=>setBudget(+e.target.value)}><option value="0">Any budget</option><option value="30">Up to ₹30 L</option><option value="50">Up to ₹50 L</option><option value="100">Up to ₹1 Cr</option><option value="250">Up to ₹2.5 Cr</option><option value="500">Up to ₹5 Cr</option></select></label>
-        <a className="button search-button" href="#properties">Find properties ↗</a>
+        <label><span>MIN. BEDROOMS</span><select value={minBeds} onChange={e=>setMinBeds(+e.target.value)}><option value="0">Any</option><option value="1">1+ bedroom</option><option value="2">2+ bedrooms</option><option value="3">3+ bedrooms</option><option value="4">4+ bedrooms</option></select></label><label><span>MIN. AREA</span><select value={minArea} onChange={e=>setMinArea(+e.target.value)}><option value="0">Any size</option><option value="1000">1,000+ sq ft</option><option value="1500">1,500+ sq ft</option><option value="2000">2,000+ sq ft</option><option value="3000">3,000+ sq ft</option></select></label><label><span>MAX. AREA</span><select value={maxArea} onChange={e=>setMaxArea(+e.target.value)}><option value="0">Any size</option><option value="1200">Up to 1,200 sq ft</option><option value="2000">Up to 2,000 sq ft</option><option value="3000">Up to 3,000 sq ft</option></select></label><a className="button search-button" href="#properties">Find properties ↗</a>
       </div>
     </section>
 
